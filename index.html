@@ -3,36 +3,91 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>您的取貨憑證</title>
-    <!-- 1. 必須引入正確的函式庫 -->
-    <script src="https://cdnjs.cloudflare.com.js"></script>
+    <title>自動取貨系統 - 憑證</title>
+    
+    <!-- 引入 QR Code 產生庫 (務必確保網址完整) -->
+    <script src="https://cdnjs.cloudflare.com"></script>
+    
     <style>
-        body { font-family: sans-serif; text-align: center; padding-top: 50px; background-color: #f8f9fa; }
-        .container { background: white; padding: 20px; border-radius: 10px; display: inline-block; box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
-        #qrcode { display: flex; justify-content: center; margin: 20px 0; }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f0f2f5;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+        .card {
+            background: white;
+            padding: 30px;
+            border-radius: 20px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+            text-align: center;
+            width: 300px;
+        }
+        h2 {
+            color: #1a73e8;
+            margin-bottom: 10px;
+        }
+        #qrcode {
+            margin: 25px auto;
+            display: flex;
+            justify-content: center;
+            border: 10px solid #fff;
+        }
+        .order-info {
+            background: #f8f9fa;
+            padding: 10px;
+            border-radius: 8px;
+            color: #5f6368;
+            font-weight: bold;
+            word-break: break-all;
+        }
+        .footer {
+            margin-top: 20px;
+            font-size: 12px;
+            color: #9aa0a6;
+        }
     </style>
 </head>
 <body>
-    <div class="container">
-        <h2>請出示此碼取貨</h2>
+
+    <div class="card">
+        <h2>請出示取貨碼</h2>
+        <p style="color: #666;">請將此畫面對準機器鏡頭</p>
+        
+        <!-- QR Code 顯示區域 -->
         <div id="qrcode"></div>
-        <p id="order-id">載入中...</p>
+        
+        <div class="order-info">
+            訂單編號：<span id="order-id">載入中...</span>
+        </div>
+        
+        <div class="footer">
+            © 2024 自動化取貨系統
+        </div>
     </div>
 
     <script>
-        // 2. 解析網址中的 ?id=XXXX
+        // 1. 從網址取得參數 (例如: ?id=ABC123)
         const urlParams = new URLSearchParams(window.location.search);
-        const orderId = urlParams.get('id') || "Invalid_ID";
+        const orderId = urlParams.get('id') || "無效編號";
         
-        // 3. 顯示編號
-        document.getElementById('order-id').innerText = "訂單編號: " + orderId;
+        // 2. 將編號顯示在網頁上
+        document.getElementById('order-id').innerText = orderId;
         
-        // 4. 產生 QR Code
+        // 3. 產生 QR Code
+        // 參數說明: 容器ID, 內容, 寬, 高
         new QRCode(document.getElementById("qrcode"), {
             text: orderId,
             width: 200,
-            height: 200
+            height: 200,
+            colorDark : "#000000",
+            colorLight : "#ffffff",
+            correctLevel : QRCode.CorrectLevel.H // 高容錯等級，增加掃描成功率
         });
     </script>
+
 </body>
 </html>
