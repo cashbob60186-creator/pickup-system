@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>您的取貨憑證</title>
+    <!-- 1. 必須引入正確的函式庫 -->
+    <script src="https://cdnjs.cloudflare.com"></script>
+    <style>
+        body { font-family: sans-serif; text-align: center; padding-top: 50px; background-color: #f8f9fa; }
+        .container { background: white; padding: 20px; border-radius: 10px; display: inline-block; box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
+        #qrcode { display: flex; justify-content: center; margin: 20px 0; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>請出示此碼取貨</h2>
+        <div id="qrcode"></div>
+        <p id="order-id">載入中...</p>
+    </div>
+
+    <script>
+        // 2. 解析網址中的 ?id=XXXX
+        const urlParams = new URLSearchParams(window.location.search);
+        const orderId = urlParams.get('id') || "Invalid_ID";
+        
+        // 3. 顯示編號
+        document.getElementById('order-id').innerText = "訂單編號: " + orderId;
+        
+        // 4. 產生 QR Code
+        new QRCode(document.getElementById("qrcode"), {
+            text: orderId,
+            width: 200,
+            height: 200
+        });
+    </script>
+</body>
+</html>
